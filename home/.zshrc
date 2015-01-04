@@ -1,7 +1,6 @@
 # Created by newuser for 5.0.7
 
 
-
 # 補完の有効化
 autoload -U compinit && compinit
 
