@@ -1,0 +1,31 @@
+[user]
+  email = ishikurasakura@gmail.com
+  name = y.fujii
+[color]
+  ui = auto
+[core]
+  excludesfile = /Users/yoshitsugu/.gitignore_global
+  quotepath = false
+  editor = vim
+  pager = less
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+[alias]
+  # マージ済みのブランチを全て消す
+  delete-merged-branches = !git branch --merged | grep -v \\* | xargs -I % git branch -d %
+
+  pm= "pull mainline master"
+  pcb            = "!git push mainline `git rev-parse --abbrev-ref HEAD`"
+
+  # ブランチ名をコミットメッセージにしてコミットするエイリアス >>> http://qiita.com/banyan@github/items/2f8fd5c5cb3b9914219f
+  cib = !git commit -m \"`git rev-parse --abbrev-ref HEAD | ruby -e \"print STDIN.read.strip.gsub('-', ' ').capitalize\"`\"
+[init]
+  templatedir = ~/.git_template
+[merge]
+  tool = vimdiff
+[mergetool]
+  keepBackup = false

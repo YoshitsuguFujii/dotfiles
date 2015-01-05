@@ -1,4 +1,11 @@
+emmet-vim
+gitv
 neobundle.vim
 unite.vim
+vim-abolish
+vim-bundler
 vim-colors-solarized
+vim-fugitive
+vim-over
+vim-ruby-heredoc-syntax
 vimfiler

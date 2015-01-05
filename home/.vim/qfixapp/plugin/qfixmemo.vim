@@ -425,7 +425,6 @@ endif
 " 0 : QFixMRU_Titleを利用しない(カレント行がタイトル行扱い)
 " 1 : QFixMRU_Titleを利用する
 function! QFixMRUGetPre(file)
-  echo g:qfixmemo_dir
   let root = g:qfixmemo_dir
   if exists('g:QFixMRU_RootDir')
     let g:qfixmemo_dir = g:QFixMRU_RootDir

@@ -1,4 +1,3 @@
-
 " 設定関連 {{{
   let mapleader = ","   " キーマップリーダー
 
@@ -200,6 +199,7 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   endif
 
   NeoBundleFetch 'Shougo/neobundle.vim'
+  NeoBundle 'Shougo/unite.vim'
 
   "vimのcolor設定{{{
     NeoBundle 'altercation/vim-colors-solarized'
@@ -219,9 +219,33 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
     hi PmenuSel cterm=reverse ctermfg=33 ctermbg=222 gui=reverse guifg=#3399ff guibg=#f0e68c
   "}}}
 
-  NeoBundle 'Shougo/unite.vim'
-  NeoBundle 'Shougo/vimfiler'
-  let g:vimfiler_as_default_explorer = 1
+  NeoBundle 'Shougo/vimfiler' " {{{
+    let g:vimfiler_as_default_explorer = 1
+    "bookmarkだけホームディレクトリに保存
+    let g:unite_source_bookmark_directory = $HOME . '/.unite/bookmark'
+  " }}}
+
+  " vim上でgitを使う
+  NeoBundle 'tpope/vim-fugitive'
+  NeoBundleLazy "gregsexton/gitv", {
+       \ "depends": ["tpope/vim-fugitive"],
+       \ "autoload": {
+       \   "commands": ["Gitv"],
+       \ }}
+
+  " camelcaseとかに変換してくれそうなvim
+  NeoBundle "tpope/vim-abolish"
+  NeoBundle 'tpope/vim-bundler'
+
+  " Ruby {{{
+      " ヒアドキュメントのシンタックスハイライト
+      NeoBundle 'joker1007/vim-ruby-heredoc-syntax'
+  " }}}
+
+  NeoBundle 'mattn/emmet-vim'
+
+  NeoBundle 'osyo-manga/vim-over'
+  nnoremap <silent> <Leader>/ :OverCommandLine<CR>%s/
 
   filetype plugin indent on
 "}}}

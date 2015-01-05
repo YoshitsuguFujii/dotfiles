@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+cached_files = `git diff --cached --name-only`
+if cached_files.split($/).select{|f| File.exist?(f) }.any? {|path| File.read(path).include?('binding.pry') }
+  puts 'ERROR: binding.pry is found'
+  exit 1
+end
+

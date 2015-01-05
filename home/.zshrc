@@ -79,6 +79,7 @@ hash -d classi-mock=~/Dropbox/source/classi/classi-fl15-mock
 hash -d classi-setting=~/Dropbox/source/classi/classi_setting
 hash -d classi-core=~/Dropbox/source/classi/classi_core
 hash -d takuhai=~/Dropbox/source/takuhai
+hash -d real_af=~/Dropbox/source/logiclogic/realaf_admin
 
 # direnv設定
 # some more ls aliases
