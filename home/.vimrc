@@ -6,5 +6,3 @@ set clipboard+=unnamed
 " set background=dark
 " colorscheme solarized
 " let g:solarized_termcolors=256
-
-

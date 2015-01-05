@@ -61,8 +61,17 @@ setopt inc_append_history
 bindkey "^R" history-incremental-search-backward
 bindkey "^S" history-incremental-search-forward
 
-# zsh-syntax-highlightingを使う
-source ~/zsh_plugin/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+#========================
+# zsh-syntax-highlighting
+#========================
+if [ -f ~/.zsh_plugin/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh ]; then
+  source ~/.zsh_plugin/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh
+fi
+
+# zshの補完にも同じ色を設定 -> http://qiita.com/items/84fa4e051c3325098be3
+if [ -n "$LS_COLORS" ]; then
+  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+fi
 
 # hash
 hash -d classi=~/Dropbox/source/classi
@@ -173,18 +182,83 @@ ls_abbrev() {
   bindkey '^m' do_enter
 
 
-#ウィンドウプラットフォームの場合、ターミナルのタイトルに「ユーザ名@ホスト名:カレントパス」も表示されるようになる。
-case "${TERM}" in
-kterm*|xterm*)
-  precmd() {
-    echo -ne "\033]0;${USER}@${HOST%%.*}:${PWD}\007"
-  }
-  export LSCOLORS=exfxcxdxbxegedabagacad
-  export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-  zstyle ':completion:*' list-colors \
-    'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'cd=43;34'
-  ;;
-esac
+
+# 一定時間以上かかる処理の場合は終了時に通知してくれる -> http://kazuph.hateblo.jp/entry/2013/10/23/005718
+local COMMAND=""
+local COMMAND_TIME=""
+# http://qiita.com/kazuph/items/3bfdfce6b7d02b43bf4d?utm_source=Qiita+Newsletter+Users&utm_campaign=640328b4b9-Qiita_newsletter_76_29_10_2013&utm_medium=email&utm_term=0_e44feaa081-640328b4b9-32762373
+alias pong='perl -nle '\''print "display notification \"$_\" with title \"Terminal\""'\'' | osascript'
+precmd() {
+    if [ "$COMMAND_TIME" -ne "0" ] ; then
+        local d=`date +%s`
+        d=`expr $d - $COMMAND_TIME`
+        if [ "$d" -ge "30" ] ; then
+            COMMAND="$COMMAND "
+            #which terminal-notifier > /dev/null 2>&1 && terminal-notifier -message "${${(s: :)COMMAND}[1]}" -m "$COMMAND";
+            #echo "display notification 'bbb' with title 'aaa' subtitle "aa"" | osascript
+            #local AAA='display notification "I am a command-line." with title "aaa" subtitle "bbb"'
+            #echo 'display notification "'"${COMMAND}"'" with title "'"${${(s: :)COMMAND}[1]}"'" subtitle "完了"' | osascript
+            #local AAA='display notification "'"${COMMAND}"'" with title "完了" subtitle "'"${${(s: :)COMMAND}[1]}"'"'
+            #echo $AAA
+            echo 'display notification "'"${COMMAND}"'" with title "完了" subtitle "'"${${(s: :)COMMAND}[1]}"'"' | osascript
+        fi
+    fi
+    COMMAND="0"
+    COMMAND_TIME="0"
+}
+preexec () {
+    COMMAND="${1}"
+    if [ "`perl -e 'print($ARGV[0]=~/ssh|^vi/)' $COMMAND`" -ne 1 ] ; then
+        COMMAND_TIME=`date +%s`
+    fi
+}
+
+# tmuxでSSH時に変更したwindow-nameを自動でもとに戻す -> http://qiita.com/yuku_t/items/4ffaa516914e7426419a
+function ssh() {
+  local window_name=$(tmux display -p '#{window_name}')
+  #command ssh $@
+  command ~/bin/ssh-host-color.sh $@
+  tmux rename-window $window_name
+}
+
+function peco-snippets() {
+
+    local line
+    local snippet
+    local cwd
+    local local_snippet
+    if [ ! -e ~/.snippets ]; then
+        echo "~/.snippets is not found." >&2
+        return 1
+    fi
+
+    # Get snippets in the current directory if it exists.
+    cwd=`pwd`
+    if [ -e "$cwd/.snippets" ]; then
+      local_snippet="$cwd/.snippets"
+    else
+      local_snippet=""
+    fi
+
+    line=$(cat $local_snippet ~/.snippets | grep -v "^\s*#" | grep -v '^\s*$' | peco --query "$LBUFFER")
+    if [ -z "$line" ]; then
+        return 1
+    fi
+
+    snippet=$(echo "$line" | sed "s/^[ |\*]*\[[^]]*\] *//g")
+    if [ -z "$snippet" ]; then
+        return 1
+    fi
+
+    BUFFER="$snippet"
+    # 決定時にそのまま実行
+    zle accept-line
+
+    # 決定時にそのまま実行しない
+    #zle clear-screen
+}
+zle -N peco-snippets
+bindkey '^x^x' peco-snippets
 
 # tmux自動起動
 # http://d.hatena.ne.jp/tyru/20100828/run_tmux_or_screen_at_shell_startup
