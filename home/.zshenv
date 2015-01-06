@@ -11,3 +11,8 @@ eval "$(direnv hook $0)"
 
 # パスの追加
 fpath=(~/.zsh/completion $fpath)
+
+# 追加のコマンドをパスに追加
+PATH=~/bin:$PATH
+PATH=~/bin/git-info:$PATH
+PATH=~/bin/git-ls-branches:$PATH
