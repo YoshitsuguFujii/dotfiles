@@ -3,9 +3,11 @@ gitv
 neobundle.vim
 unite.vim
 vim-abolish
-vim-bundler
+vim-coffee-script
 vim-colors-solarized
 vim-fugitive
 vim-over
-vim-ruby-heredoc-syntax
+vim-rails
+vim-slim
+vim-surround
 vimfiler

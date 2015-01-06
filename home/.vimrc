@@ -146,6 +146,8 @@
   " 再描画
   nmap ,rd :<C-u>redraw!
 
+  "テキストオブジェクト的にカーソルが単語内の何処にあってもヤンクした文字列と置換
+  nnoremap <silent> ciy ciw<C-r>0<ESC>:let@/=@1<CR>:noh<CR>
 " }}}
 
 " ファイルタイプの追加 {{{
@@ -222,30 +224,44 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   NeoBundle 'Shougo/vimfiler' " {{{
     let g:vimfiler_as_default_explorer = 1
     "bookmarkだけホームディレクトリに保存
-    let g:unite_source_bookmark_directory = $HOME . '/.unite/bookmark'
+    "let g:unite_source_bookmark_directory = $HOME . '/.unite/bookmark'
+
+    "セーフモードを無効にした状態で起動する
+    let g:vimfiler_safe_mode_by_default = 0
   " }}}
 
-  " vim上でgitを使う
-  NeoBundle 'tpope/vim-fugitive'
-  NeoBundleLazy "gregsexton/gitv", {
-       \ "depends": ["tpope/vim-fugitive"],
-       \ "autoload": {
-       \   "commands": ["Gitv"],
-       \ }}
-
-  " camelcaseとかに変換してくれそうなvim
-  NeoBundle "tpope/vim-abolish"
-  NeoBundle 'tpope/vim-bundler'
+  " git {{{
+    NeoBundle 'tpope/vim-fugitive'
+    NeoBundleLazy "gregsexton/gitv", {
+         \ "depends": ["tpope/vim-fugitive"],
+         \ "autoload": {
+         \   "commands": ["Gitv"],
+         \ }}
+  " }}}
 
   " Ruby {{{
       " ヒアドキュメントのシンタックスハイライト
-      NeoBundle 'joker1007/vim-ruby-heredoc-syntax'
+      "NeoBundle 'joker1007/vim-ruby-heredoc-syntax'
+      "NeoBundle 'tpope/vim-bundler'
+
+      NeoBundle 'tpope/vim-rails'
   " }}}
+
+  " syntax highlight {{{
+    NeoBundle 'slim-template/vim-slim'
+    NeoBundle 'kchmck/vim-coffee-script'
+    au BufRead,BufNewFile,BufReadPre *.coffee   set filetype=coffee " vimにcoffeeファイルタイプを認識させる
+  " }}}
+
+  " camelcaseとかに変換してくれそうなvim
+  NeoBundle "tpope/vim-abolish"
 
   NeoBundle 'mattn/emmet-vim'
 
   NeoBundle 'osyo-manga/vim-over'
   nnoremap <silent> <Leader>/ :OverCommandLine<CR>%s/
+
+  NeoBundle 'tpope/vim-surround'
 
   filetype plugin indent on
 "}}}
