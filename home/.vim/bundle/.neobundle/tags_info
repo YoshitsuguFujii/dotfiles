@@ -1,6 +1,14 @@
 emmet-vim
 gitv
+lightline.vim
+matchit
 neobundle.vim
+neocomplcache
+neosnippet
+neosnippet-snippets
+switch.vim
+syntastic
+unite-rails
 unite.vim
 vim-abolish
 vim-coffee-script

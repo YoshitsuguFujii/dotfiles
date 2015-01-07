@@ -148,6 +148,9 @@
 
   "テキストオブジェクト的にカーソルが単語内の何処にあってもヤンクした文字列と置換
   nnoremap <silent> ciy ciw<C-r>0<ESC>:let@/=@1<CR>:noh<CR>
+
+  " binding.pryを探す
+  nnoremap <C-n> :<C-u>/binding.pry<CR>
 " }}}
 
 " ファイルタイプの追加 {{{
@@ -262,6 +265,273 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   nnoremap <silent> <Leader>/ :OverCommandLine<CR>%s/
 
   NeoBundle 'tpope/vim-surround'
+
+  NeoBundle 'AndrewRadev/switch.vim' "{{{
+  nnoremap - :Switch<cr>
+  let s:switch_definition = {
+        \ '*': [
+        \   ['is', 'are']
+        \ ],
+        \ 'ruby,eruby,haml,slim' : [
+        \   ['if', 'unless'],
+        \   ['while', 'until'],
+        \   ['.blank?', '.present?'],
+        \   ['include', 'extend'],
+        \   ['class', 'module'],
+        \   ['.inject', '.delete_if'],
+        \   ['.map', '.map!'],
+        \   ['attr_accessor', 'attr_reader', 'attr_writer'],
+        \ ],
+        \ 'Gemfile,Berksfile' : [
+        \   ['=', '<', '<=', '>', '>=', '~>'],
+        \ ],
+        \ 'ruby.application_template' : [
+        \   ['yes?', 'no?'],
+        \   ['lib', 'initializer', 'file', 'vendor', 'rakefile'],
+        \   ['controller', 'model', 'view', 'migration', 'scaffold'],
+        \ ],
+        \ 'erb,html,php' : [
+        \   { '<!--\([a-zA-Z0-9 /]\+\)--></\(div\|ul\|li\|a\)>' : '</\2><!--\1-->' },
+        \ ],
+        \ 'rails' : [
+        \   [100, ':continue', ':information'],
+        \   [101, ':switching_protocols'],
+        \   [102, ':processing'],
+        \   [200, ':ok', ':success'],
+        \   [201, ':created'],
+        \   [202, ':accepted'],
+        \   [203, ':non_authoritative_information'],
+        \   [204, ':no_content'],
+        \   [205, ':reset_content'],
+        \   [206, ':partial_content'],
+        \   [207, ':multi_status'],
+        \   [208, ':already_reported'],
+        \   [226, ':im_used'],
+        \   [300, ':multiple_choices'],
+        \   [301, ':moved_permanently'],
+        \   [302, ':found'],
+        \   [303, ':see_other'],
+        \   [304, ':not_modified'],
+        \   [305, ':use_proxy'],
+        \   [306, ':reserved'],
+        \   [307, ':temporary_redirect'],
+        \   [308, ':permanent_redirect'],
+        \   [400, ':bad_request'],
+        \   [401, ':unauthorized'],
+        \   [402, ':payment_required'],
+        \   [403, ':forbidden'],
+        \   [404, ':not_found'],
+        \   [405, ':method_not_allowed'],
+        \   [406, ':not_acceptable'],
+        \   [407, ':proxy_authentication_required'],
+        \   [408, ':request_timeout'],
+        \   [409, ':conflict'],
+        \   [410, ':gone'],
+        \   [411, ':length_required'],
+        \   [412, ':precondition_failed'],
+        \   [413, ':request_entity_too_large'],
+        \   [414, ':request_uri_too_long'],
+        \   [415, ':unsupported_media_type'],
+        \   [416, ':requested_range_not_satisfiable'],
+        \   [417, ':expectation_failed'],
+        \   [422, ':unprocessable_entity'],
+        \   [423, ':precondition_required'],
+        \   [424, ':too_many_requests'],
+        \   [426, ':request_header_fields_too_large'],
+        \   [500, ':internal_server_error'],
+        \   [501, ':not_implemented'],
+        \   [502, ':bad_gateway'],
+        \   [503, ':service_unavailable'],
+        \   [504, ':gateway_timeout'],
+        \   [505, ':http_version_not_supported'],
+        \   [506, ':variant_also_negotiates'],
+        \   [507, ':insufficient_storage'],
+        \   [508, ':loop_detected'],
+        \   [510, ':not_extended'],
+        \   [511, ':network_authentication_required'],
+        \ ],
+        \ 'rspec': [
+        \   ['describe', 'context', 'specific', 'example'],
+        \   ['before', 'after'],
+        \   ['be_true', 'be_false'],
+        \   ['get', 'post', 'put', 'delete'],
+        \   ['==', 'eql', 'equal'],
+        \   { '\.should_not': '\.should' },
+        \   ['\.to_not', '\.to'],
+        \   { '\([^. ]\+\)\.should\(_not\|\)': 'expect(\1)\.to\2' },
+        \   { 'expect(\([^. ]\+\))\.to\(_not\|\)': '\1.should\2' },
+        \ ],
+        \ 'markdown' : [
+        \   ['[ ]', '[x]']
+        \ ]
+        \ }
+  " }}} Switch.vim
+
+  NeoBundle 'scrooloose/syntastic' " {{{
+    let g:syntastic_mode_map = { 'mode': 'passive',
+                \ 'active_filetypes': ['ruby'] }
+    let g:syntastic_ruby_checkers = ['rubocop']
+  " }}}
+
+  NeoBundle 'basyura/unite-rails' " {{{
+    function! UniteRailsSetting()
+      nnoremap <buffer><C-i>h           :<C-U>Unite rails/helper<CR>
+      nnoremap <buffer><C-i><C-u><C-u>  :<C-U>Unite rails/view<CR>
+      nnoremap <buffer><C-i><C-u>       :<C-U>Unite rails/model<CR>
+      nnoremap <buffer><C-i>            :<C-U>Unite rails/controller<CR>
+
+      nnoremap <buffer><C-i>c           :<C-U>Unite rails/config<CR>
+      nnoremap <buffer><C-i>s           :<C-U>Unite rails/spec<CR>
+      nnoremap <buffer><C-i>m           :<C-U>Unite rails/db -input=migrate<CR>
+      nnoremap <buffer><C-i>l           :<C-U>Unite rails/lib<CR>
+      nnoremap <buffer><expr><C-i>g     ':e '.b:rails_root.'/Gemfile<CR>'
+      nnoremap <buffer><expr><C-i>r     ':e '.b:rails_root.'/config/routes.rb<CR>'
+      nnoremap <buffer><expr><C-i>se    ':e '.b:rails_root.'/db/seeds.rb<CR>'
+      nnoremap <buffer><C-i>ra          :<C-U>Unite rails/rake<CR>
+    endfunction
+    aug MyAutoCmd
+      au User Rails call UniteRailsSetting()
+    aug END
+  " }}}
+
+  NeoBundle 'Shougo/neocomplcache' "{{{
+    " Disable AutoComplPop.
+    let g:acp_enableAtStartup = 0
+    " Use neocomplcache.
+    let g:neocomplcache_enable_at_startup = 1
+    " Use smartcase.
+    let g:neocomplcache_enable_smart_case = 1
+    " Set minimum syntax keyword length.
+    let g:neocomplcache_min_syntax_length = 3
+    let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+
+    " Define dictionary.
+    let g:neocomplcache_dictionary_filetype_lists = {
+        \ 'default' : ''
+        \ }
+
+    " Plugin key-mappings.
+    inoremap <expr><C-g>     neocomplcache#undo_completion()
+    inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+    " Recommended key-mappings.
+    " <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function()
+      return neocomplcache#smart_close_popup() . "\<CR>"
+    endfunction
+    " <TAB>: completion.
+    inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr><C-y>  neocomplcache#close_popup()
+    inoremap <expr><C-e>  neocomplcache#cancel_popup()
+  "}}}
+
+  NeoBundle 'Shougo/neosnippet' " {{{
+    NeoBundle 'Shougo/neosnippet-snippets'
+
+    " Plugin key-mappings.
+    imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+    " SuperTab like snippets behavior.
+    imap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)"
+    \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)"
+    \: "\<TAB>"
+
+    " For snippet_complete marker.
+    if has('conceal')
+      set conceallevel=2 concealcursor=i
+    endif
+
+    " 自分用 snippet ファイルの場所
+    let s:my_snippet = '~/.vim/snippets'
+    let g:neosnippet#snippets_directory = s:my_snippet
+
+    " neosnippet.vim公式指定をちょっといじる => http://qiita.com/muran001/items/4a8ffafb9c6564313893
+    imap <expr><CR> neosnippet#expandable() <bar><bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<CR>"
+    imap <expr><TAB> neosnippet#jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)"
+    \: pumvisible() ? "\<C-n>" : "\<TAB>"
+    smap <expr><TAB> neosnippet#jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)"
+    \: "\<TAB>"
+  " }}}
+
+  NeoBundle 'tmhedberg/matchit'
+
+  NeoBundle 'itchyny/lightline.vim' "{{{
+    let g:lightline = {
+            \ 'colorscheme': 'wombat',
+            \ 'mode_map': {'c': 'NORMAL'},
+            \ 'active': {
+            \   'left': [ [ 'mode', 'paste' ], [ 'fugitive', 'filename' ] ]
+            \ },
+            \ 'component_function': {
+            \   'modified': 'MyModified',
+            \   'readonly': 'MyReadonly',
+            \   'fugitive': 'MyFugitive',
+            \   'filename': 'MyFilename',
+            \   'fileformat': 'MyFileformat',
+            \   'filetype': 'MyFiletype',
+            \   'fileencoding': 'MyFileencoding',
+            \   'mode': 'MyMode'
+            \ }
+            \ }
+
+    function! MyModified()
+      return &ft =~ 'help\|vimfiler\|gundo' ? '' : &modified ? '+' : &modifiable ? '' : '-'
+    endfunction
+
+    function! MyReadonly()
+      return &ft !~? 'help\|vimfiler\|gundo' && &readonly ? 'x' : ''
+    endfunction
+
+    function! MyFilename()
+      return ('' != MyReadonly() ? MyReadonly() . ' ' : '') .
+            \ (&ft == 'vimfiler' ? vimfiler#get_status_string() :
+            \  &ft == 'unite' ? unite#get_status_string() :
+            \  &ft == 'vimshell' ? vimshell#get_status_string() :
+            \ '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+            \ ('' != MyModified() ? ' ' . MyModified() : '')
+    endfunction
+
+    function! MyFugitive()
+      try
+        if &ft !~? 'vimfiler\|gundo' && exists('*fugitive#head')
+          return fugitive#head()
+        endif
+      catch
+      endtry
+      return ''
+    endfunction
+
+    function! MyFileformat()
+      return winwidth(0) > 70 ? &fileformat : ''
+    endfunction
+
+    function! MyFiletype()
+      return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
+    endfunction
+
+    function! MyFileencoding()
+      return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+    endfunction
+
+    function! MyMode()
+      return winwidth(0) > 60 ? lightline#mode() : ''
+    endfunction
+
+    " カラー設定
+    set t_Co=256
+  " }}}
+"}}}
 
   filetype plugin indent on
 "}}}
