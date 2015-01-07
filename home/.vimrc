@@ -205,6 +205,14 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
 
   NeoBundleFetch 'Shougo/neobundle.vim'
   NeoBundle 'Shougo/unite.vim'
+  NeoBundle "tpope/vim-abolish"
+  NeoBundle 'mattn/emmet-vim'
+  NeoBundle 'tpope/vim-surround'
+  NeoBundle 'tmhedberg/matchit'
+  NeoBundle 'h1mesuke/vim-alignta'
+
+  NeoBundle 'osyo-manga/vim-over'
+  nnoremap <silent> <Leader>/ :OverCommandLine<CR>%s/
 
   "vimのcolor設定{{{
     NeoBundle 'altercation/vim-colors-solarized'
@@ -255,16 +263,6 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
     NeoBundle 'kchmck/vim-coffee-script'
     au BufRead,BufNewFile,BufReadPre *.coffee   set filetype=coffee " vimにcoffeeファイルタイプを認識させる
   " }}}
-
-  " camelcaseとかに変換してくれそうなvim
-  NeoBundle "tpope/vim-abolish"
-
-  NeoBundle 'mattn/emmet-vim'
-
-  NeoBundle 'osyo-manga/vim-over'
-  nnoremap <silent> <Leader>/ :OverCommandLine<CR>%s/
-
-  NeoBundle 'tpope/vim-surround'
 
   NeoBundle 'AndrewRadev/switch.vim' "{{{
   nnoremap - :Switch<cr>
@@ -464,8 +462,6 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
     \: "\<TAB>"
   " }}}
 
-  NeoBundle 'tmhedberg/matchit'
-
   NeoBundle 'itchyny/lightline.vim' "{{{
     let g:lightline = {
             \ 'colorscheme': 'wombat',
@@ -531,6 +527,14 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
     " カラー設定
     set t_Co=256
   " }}}
+
+  NeoBundle 'rhysd/clever-f.vim' "{{{
+    " http://rhysd.hatenablog.com/entry/2013/09/17/220837
+    let g:clever_f_ignore_case = 1             " 小文字・大文字の区別はしない
+    let g:clever_f_smart_case = 1              " 大文字が入力された場合は大文字のみ検索
+    let g:clever_f_across_no_line = 1          " 行をまたがない
+    let g:clever_f_chars_match_any_signs = ';' " 記号を;でひっかける
+  "}}}
 "}}}
 
   filetype plugin indent on

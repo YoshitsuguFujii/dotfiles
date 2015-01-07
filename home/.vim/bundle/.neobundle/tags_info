@@ -1,3 +1,4 @@
+clever-f.vim
 emmet-vim
 gitv
 lightline.vim
@@ -11,6 +12,7 @@ syntastic
 unite-rails
 unite.vim
 vim-abolish
+vim-alignta
 vim-coffee-script
 vim-colors-solarized
 vim-fugitive
