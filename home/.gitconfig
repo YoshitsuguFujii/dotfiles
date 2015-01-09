@@ -18,6 +18,9 @@
   # マージ済みのブランチを全て消す
   delete-merged-branches = !git branch --merged | grep -v \\* | xargs -I % git branch -d %
 
+  # 直前のコミットを取り消します。
+  cancel = reset --soft HEAD~1
+
   pm= "pull mainline master"
   pcb            = "!git push mainline `git rev-parse --abbrev-ref HEAD`"
 

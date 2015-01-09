@@ -76,6 +76,21 @@
     syntax match JISX0208Space "　" display containedin=ALL
     highlight JISX0208Space term=underline ctermbg=LightCyan
   endf
+
+
+  " Vimを終了しても undo 履歴を復元する ->http://mba-hack.blogspot.jp/2013/02/vim.html
+  " http://vim-users.jp/2010/07/hack162/
+  " undo 履歴を保存するディレクトリを指定する
+  set undodir=./.vimundo,~/.vimundo
+
+  " バッファの保存時に undo 履歴をファイルに保存する(すべてのファイル対象)
+  set undofile
+  if has('persistent_undo')
+    augroup vimrc-undofile
+    autocmd!
+    autocmd BufReadPre ~/* setlocal undofile
+    augroup END
+  endif
 "}}}
 
 " util {{{
@@ -210,6 +225,7 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   NeoBundle 'tpope/vim-surround'
   NeoBundle 'tmhedberg/matchit'
   NeoBundle 'h1mesuke/vim-alignta'
+  NeoBundle 'mattn/httpstatus-vim'
 
   NeoBundle 'osyo-manga/vim-over'
   nnoremap <silent> <Leader>/ :OverCommandLine<CR>%s/
@@ -534,6 +550,13 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
     let g:clever_f_smart_case = 1              " 大文字が入力された場合は大文字のみ検索
     let g:clever_f_across_no_line = 1          " 行をまたがない
     let g:clever_f_chars_match_any_signs = ';' " 記号を;でひっかける
+  "}}}
+
+  NeoBundle 'LeafCage/yankround.vim' " {{{
+    nmap p <Plug>(yankround-p)
+    nmap <C-p> <Plug>(yankround-prev)
+    nmap <C-n> <Plug>(yankround-next)
+    nmap <C-p> <Plug>(yankround-prev)
   "}}}
 "}}}
 

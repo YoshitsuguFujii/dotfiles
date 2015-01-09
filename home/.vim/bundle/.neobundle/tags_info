@@ -1,6 +1,7 @@
 clever-f.vim
 emmet-vim
 gitv
+httpstatus-vim
 lightline.vim
 matchit
 neobundle.vim
@@ -21,3 +22,4 @@ vim-rails
 vim-slim
 vim-surround
 vimfiler
+yankround.vim
