@@ -1,4 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_cnt =5
 let g:netrw_dirhist_1='/Users/yoshitsugu'
 let g:netrw_dirhist_2='/Users/yoshitsugu/Dropbox/source/classi/classi_setting/lib/cbank_client'
+let g:netrw_dirhist_3='/Users/yoshitsugu/Dropbox/source/classi/classi_setting/app/views/school_exams'
+let g:netrw_dirhist_4='/Users/yoshitsugu/Dropbox/source/classi/classi_setting/app/controllers'
+let g:netrw_dirhist_5='/Users/yoshitsugu/Dropbox/source/classi/classi_setting/app/models/concerns'

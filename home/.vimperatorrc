@@ -1,0 +1,224 @@
+" vim: set ft=vimperator:
+
+"+----------------------------------------------------------------------------------------+
+" 基本設定
+"+----------------------------------------------------------------------------------------+
+
+"ブラウザタイトルの変更
+set titlestring=Firefox
+"ページ全体で検索語を強調表示
+set hlsearch
+"検索は大文字小文字を無視する。
+set ignorecase
+
+"Googleなどのページを開いたときに入力欄にフォーカスを奪われるのを防ぐため
+set focuscontent
+
+set complete=sl
+
+"']]'や'[['で探す候補に日本人として日本語を追加。
+set nextpattern=^次(へ|の|ペ),^続き,\bnext\b,^>$,^(>>|&#187;)$,^(>|&#187;),(>|&#187;)$,\bmore\b
+set previouspattern=^前(へ|の|ペ),^戻る,\bprev|previous\b,^<$,^(<<|&#171;)$,^(<|&#171;),(<|&#171;)$
+
+"+----------------------------------------------------------------------------------------+
+" キーマップ設定
+"+----------------------------------------------------------------------------------------+
+
+"j/kの移動量を5倍に
+map j 5<C-e>
+map k 5<C-y>
+"<BS>で「戻る」
+map <BS> H
+"<A-Left>/<A-Right>かh/lでタブ移動
+map <A-Left> <C-p>
+map <A-Right> <C-n>
+map h <C-p>
+map l <C-n>
+"<A-Up>でその他のタブを閉じる
+map <A-Up> :tabonly<CR>
+"<A-Down>で現在のタブを閉じる
+"map <A-Down> d
+"<S-Left>/<S-Right>で現在のタブの位置変更
+map <S-Left>  :tabmove! -1<CR>
+map <S-Right> :tabmove! +1<CR>
+"sで現在のページを保存
+"map s :saveas<CR>
+"<A-r>でFirefoxを再起動
+map <A-r> :restart<CR>
+"<A-h>でヘルプを表示
+map <A-h> :help<CR>
+
+
+
+" ここからの設定は  http://idita.blog11.fc2.com/blog-entry-769.html
+"------------------------------------------------------------------------
+"------------------------------------------------------------------------
+
+"Global Options
+
+"キャッシュをHDDからRAMに
+set! browser.cache.disk.enable=false
+set! browser.cache.memory.enable=true
+" 単位(KB)
+set! browser.cache.memory.capacity=-1
+
+map <C-t> :set toolbars=navigation,menu
+map <C-r> :set toolbars=nonavigation,nomenu
+
+"ブックマーク・検索プラグインから開く
+"http://memo.officebrook.net/20090325.html
+com! -complete=bookmark -nargs=+ ob :t <args>
+com! -complete=search -nargs=+ os :t <args>
+map ,b :ob<space>
+map ,s :os<space>
+
+"------------------------------------------------------------------------
+"------------------------------------------------------------------------
+
+"アピアランス
+
+"カラースキーム
+colorscheme sweets_dita
+
+"キャレットの表示スタイル
+set! ui.caretWidth=8
+
+"ヒントのスタイル指定
+highlight Hint z-index:5000; font-family:monospace; font-size:11px; color:white; background-color:blue; border-color:ButtonShadow; border-width:0px; border-style:solid; padding:0px 1px 0px 1px; position:absolute; text-transform: uppercase;
+
+"リンクの色 (set linkbgcolor=aqua)
+highlight HintElem background-color:aqua;
+
+"アクティブなリンクの色 (set activelinkbgcolor=lightblue)
+highlight HintActive background:lightblue;
+
+
+"------------------------------------------------------------------------
+"------------------------------------------------------------------------
+
+"------------------------------------------------------------------------
+"------------------------------------------------------------------------
+
+""plugins""
+
+"char-hints-mod2.js
+
+"ヒントモードのアルファベットは大文字で表示, キー入力は小文字で
+"let g:hintsio="iO"
+
+"vimp3から。使用するアルファベットを指定。2文字目以下に頻繁に使いたい文字を。
+"http://d.hatena.ne.jp/ruedap/20110327/vimperator3_hint_mode_alphabet_uppercase
+set hintchars=ifjklasdweuocvbnm
+
+"大文字で表示して小文字で入力、はスタイルシートで指定する。
+
+
+"------------------------------------------------------------------------
+"------------------------------------------------------------------------
+
+"リンクURLをステータスラインに表示
+"set showstatuslinks=1
+
+".vimperatorrc読み終わりのメッセージ
+echo "vimperator: Welcome back"
+
+"エディタをMacVim-KaoriYaに(mvimスクリプトをダウンロードして使う
+set editor='/usr/bin/vim'
+
+
+"------------------------------------------------------------------------
+
+"feedSomeKeys_2.js
+
+"対象外のページに移っても前の設定を引きずらないようにする
+"http://retlet.net/log/2008/06/feedsomekeys-js.html
+:autocmd LocationChange .* :fmapc
+
+"tumblr
+:autocmd LocationChange 'www\.tumblr\.com/' :fmap j k t l p
+
+"Gmail
+autocmd LocationChange mail\.google\.com/mail :fmap c / j k n p o u e x s r a # [ ] z ? ! gi gs gt gd ga gc gl gb *a *n { }
+
+"GoogleReader
+"http://d.karashi.org/20101030.html#p01
+autocmd LocationChange www\.google\.(com|co\.jp)/reader :fmap -vkey j k n p m s t v  A r S D N P X o O gh ga gs gt gu u / ?
+"GoogleReaderFullFeed
+autocmd LocationChange www\.google\.(com|co\.jp)/reader :fmap -vkey -event=keyup z
+
+"RTM
+autocmd LocationChange www\.rememberthemilk\.com/ :fmap -vkey t c p r s 1 2 3 4 a n i k j K J z <Tab> <Delete> <C-g> ?
+
+"------------------------------------------------------------------------
+
+"caret-hint.js
+
+map I ;c
+
+"------------------------------------------------------------------------
+
+"ime_controller.js
+
+let g:ex_ime_mode = "inactive"
+let g:textarea_ime_mode = "inactive"
+
+"------------------------------------------------------------------------
+
+javascript <<JS
+let statusLine = document.getElementById("liberator-statusline");
+let bottomBar = document.getElementById("liberator-bottombar");
+
+// ステータスラインに戻る/進むを表示
+if(!document.getElementById("history-indicators")) {
+  let xml = <hbox id="history-indicators" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <label value="&lt;" id="back-indicator" class="history-indicator">
+      <observes element={document.getElementById("back-button").command} attribute="disabled" />
+    </label>
+    <label value="&gt;" id="forward-indicator" class="history-indicator">
+      <observes element={document.getElementById("forward-button").command} attribute="disabled" />
+    </label>
+  </hbox>;
+
+  statusLine.appendChild(document.adoptNode(new DOMParser().parseFromString(xml.toXMLString(), "application/xml").documentElement, true));
+}
+
+// ステータスバーにブックマークアイコンを移動
+let (statusBar = document.getElementById("status-bar")) {
+  let (id = "star-button") {
+    if(!document.getElementById("panel-" + id)) {
+      let panel = document.createElement("statusbarpanel");
+      panel.setAttribute("id", "panel-" + id);
+      let (icon = document.getElementById(id)) {
+        icon.setAttribute("class", "");
+        panel.appendChild(icon);
+      }
+      statusBar.insertBefore(panel, statusBar.firstChild);
+    }
+  }
+}
+
+// ステータスラインの横にステータスバーを移動
+let (statusBar = document.getElementById("status-bar")) {
+  statusBar.style.maxHeight = "20px";
+  bottomBar.appendChild(statusBar);
+}
+
+// ステータスラインにfaviconを移動
+let (favicon = document.getElementById("page-proxy-stack")) {
+  favicon.style.maxWidth = favicon.style.maxHeight = "20px"
+  statusLine.insertBefore(favicon, statusLine.firstChild);
+}
+JS
+
+style -name history-indicators chrome://browser/content/browser.xul <<CSS
+  #history-indicators {
+    padding: 0 ! important;
+  }
+  .history-indicator {
+    margin: 0 1px ! important;
+    color: WindowText;
+  }
+  .history-indicator[disabled="true"] {
+    //visibility: hidden;
+  }
+CSS

@@ -168,7 +168,7 @@
   nnoremap <C-n> :<C-u>/binding.pry<CR>
 
   " 1行上をコピーしてyank
-  nnoremap <C-k> 0ykp
+  nnoremap <S-o> 0ykp
 " }}}
 
 " ファイルタイプの追加 {{{
@@ -559,7 +559,6 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   NeoBundle 'LeafCage/yankround.vim' " {{{
     nmap p <Plug>(yankround-p)
   "}}}
-"}}}
 
   filetype plugin indent on
 "}}}
