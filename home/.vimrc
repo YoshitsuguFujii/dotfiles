@@ -389,6 +389,8 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   "              \ 'active_filetypes': ['ruby'] }
   "  let g:syntastic_ruby_checkers = ['rubocop']
   NeoBundle 'scrooloose/syntastic'
+    let g:syntastic_mode_map = { 'mode': 'passive',
+                \ 'active_filetypes': ['ruby'] }
   " }}}
 
   NeoBundle 'basyura/unite-rails' " {{{
