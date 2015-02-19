@@ -55,6 +55,7 @@ g:yankround_dir	yankround.jax	/*g:yankround_dir*
 g:yankround_max_element_length	yankround.jax	/*g:yankround_max_element_length*
 g:yankround_max_history	yankround.jax	/*g:yankround_max_history*
 g:yankround_region_hl_groupname	yankround.jax	/*g:yankround_region_hl_groupname*
+g:yankround_use_ctrlp	yankround.jax	/*g:yankround_use_ctrlp*
 g:yankround_use_region_hl	yankround.jax	/*g:yankround_use_region_hl*
 over-changelog	over.jax	/*over-changelog*
 over-command_line-autocmd	over.jax	/*over-command_line-autocmd*

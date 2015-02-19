@@ -21,8 +21,8 @@
   # 直前のコミットを取り消します。
   cancel = reset --soft HEAD~1
 
-  pm= "pull mainline master"
-  pcb            = "!git push mainline `git rev-parse --abbrev-ref HEAD`"
+  pm = "pull mainline master"
+  pcb = "!git push mainline `git rev-parse --abbrev-ref HEAD`"
 
   # ブランチ名をコミットメッセージにしてコミットするエイリアス >>> http://qiita.com/banyan@github/items/2f8fd5c5cb3b9914219f
   cib = !git commit -m \"`git rev-parse --abbrev-ref HEAD | ruby -e \"print STDIN.read.strip.gsub('-', ' ').capitalize\"`\"

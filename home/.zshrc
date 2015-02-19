@@ -87,6 +87,7 @@ alias up='cd ..'
 alias upp='cd ../..'
 alias uppp='cd ../../..'
 alias ll='ls -alF'
+alias lsd='ls -Gal | grep ^d' #Only list directories, including hidden ones
 alias g='git'
 alias gs='git status'
 alias gst='git status -sb'
@@ -99,6 +100,8 @@ alias gb='git branch'
 alias rm="trash"
 alias zsh_reload="exec $SHELL -l"
 alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config|peco|awk "{print \$2}")'
+alias be="bundle exec"
+alias hatebu="vim ~/hatebu.rb"
 
 alias netlisteners='lsof -i -P | grep LISTEN'
 case ${OSTYPE} in
@@ -117,6 +120,8 @@ alias memostaging="vim ~/Dropbox/commonSettings/memo_staging.rb"
 alias memoprodution="vim ~/Dropbox/commonSettings/memo_prodution.rb"
 alias memojg="vim ~/Dropbox/commonSettings/memo_jg.rb"
 alias classi='vim ~/Dropbox/commonSettings/classi.rb'
+alias logica='vim ~/Dropbox/commonSettings/logica.rb'
+alias redis_server="redis-server /usr/local/etc/redis.conf&G"
 
 # cdコマンドで自動実行
 function chpwd() {
@@ -296,6 +301,52 @@ if ! is_screen_or_tmux_running && shell_has_started_interactively; then
         fi
     done
 fi
+
+
+function peco-select-history() {  # {{{
+    local tac
+    if which tac > /dev/null; then
+        tac="tac"
+    else
+        tac="tail -r"
+    fi
+    BUFFER=$(\history -n 1 | \
+        eval $tac | \
+        peco --query "$LBUFFER")
+    CURSOR=$#BUFFER
+    zle clear-screen
+}
+zle -N peco-select-history
+bindkey '^r' peco-select-history
+# }}}
+
+# vpn {{{
+function vpn-connect {
+/usr/bin/env osascript <<-EOF
+tell application "System Events"
+        tell current location of network preferences
+                set VPN to service "LogicLogic"
+                if exists VPN then connect VPN
+                repeat while (current configuration of VPN is not connected)
+                    delay 1
+                end repeat
+        end tell
+end tell
+EOF
+}
+
+function vpn-disconnect {
+/usr/bin/env osascript <<-EOF
+tell application "System Events"
+        tell current location of network preferences
+                set VPN to service "LogicLogic" -- your VPN name here
+                if exists VPN then disconnect VPN
+        end tell
+end tell
+return
+EOF
+}
+# }}}
 
 
 # プロンプト設定 #################################################### {{{

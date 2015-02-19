@@ -6,6 +6,7 @@ lightline.vim
 matchit
 neobundle.vim
 neocomplcache
+neomru.vim
 neosnippet
 neosnippet-snippets
 switch.vim

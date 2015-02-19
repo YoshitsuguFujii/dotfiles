@@ -5,11 +5,13 @@
   set clipboard+=unnamed
 
   filetype on                    " ファイル形式の検出を有効化
+  set hidden                     " gfが動かなかったので http://stackoverflow.com/questions/2414626/vim-unsaved-buffer-warning-when-switching-files-buffers
   set nocompatible               " compatible の機能をオフにします。compatible のオプションを有効にすると、Vimの便利な機能が使えなくなる。 初期値：オン
   set hlsearch                   " 検索結果をハイライト表示
   set tabstop=2                  " ファイル内の <Tab> が対応する空白の数。
   set expandtab                  " Insertモードで: <Tab> を挿入するのに、適切な数の空白を使う。（タブをスペースに展開する）
   set autoindent                 " 新しい行を開始したときに、新しい行のインデントを現在行と同じ量にする。
+  set number                     " 行番号表示
   set relativenumber             " 相対行番号表示
   set scrolloff=5                " スクロール時の余白確保
   set wildmenu                   " コマンドライン補完を拡張モードにする
@@ -131,10 +133,9 @@
   "ファイルブラウザを開く
   nnoremap <C-e> :VimFiler<CR>
   "タブで開く
-  nnoremap <S-t> :Texplore<CR>
+  nnoremap <S-t><S-t> :Texplore<CR>
 
   " bookmarkを表示
-  "nnoremap   ;ub :<C-u>Unite bookmark -default-action=vimfiler<CR>
   nnoremap   <C-b> :<C-u>Unite bookmark -default-action=vimfiler<CR>
 
   "矩形選択後<または>しても、選択を解除しないようにする
@@ -222,7 +223,32 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   endif
 
   NeoBundleFetch 'Shougo/neobundle.vim'
-  NeoBundle 'Shougo/unite.vim'
+  NeoBundle 'Shougo/unite.vim' "{{{
+    " :Unite neobundle でプラグインの有効無効をトグルする => http://qiita.com/tkhren/items/c49af5e02b281b1548af
+    if neobundle#tap('unite.vim')
+        function! neobundle#tapped.hooks.on_source(bundle)
+            "" source/neobundleでプラグインの有効無効を切り替える
+            let neobundle_toggle = { 'is_selectable': 1 }
+
+            function! neobundle_toggle.func(candidates)
+                for candidate in a:candidates
+                    let bundle = candidate.action__bundle_name
+                    let cmd = neobundle#is_sourced(bundle) ?
+                    \ 'NeoBundleDisable ' : 'NeoBundleSource '
+                    exec cmd . bundle
+                endfor
+            endfunction
+
+            call unite#custom#action('neobundle', 'source', neobundle_toggle)
+            call unite#custom#default_action('neobundle', 'source')
+        endfunction
+    endif
+
+    nnoremap <Space>up :<C-u>Unite neobundle<CR>
+  " }}}
+
+
+
   NeoBundle "tpope/vim-abolish"
   NeoBundle 'mattn/emmet-vim'
   NeoBundle 'tpope/vim-surround'
@@ -561,6 +587,10 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   NeoBundle 'LeafCage/yankround.vim' " {{{
     nmap p <Plug>(yankround-p)
   "}}}
+
+  NeoBundle 'Shougo/neomru.vim' " {{{
+    nnoremap <silent> ;ur :Unite file_mru<cr>
+  " }}}
 
   filetype plugin indent on
 "}}}
