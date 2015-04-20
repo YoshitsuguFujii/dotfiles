@@ -75,12 +75,24 @@ https://github.com/LeafCage/yankround.vim
 
 
 * ctrlp.vimによる履歴の閲覧 ~
-  この機能を使うには|g:yankround_use_ctrlp|を 非0 に定義しておきます。
+  この機能を使うには|g:ctrlp_available|を 非0 に定義しておきます。
   |:CtrlPYankRound|コマンドを実行してください。
   レジスタ履歴が一覧表示されます。履歴を選択後、
   - <CR>で、その履歴をカーソル位置に挿入します。
   - <C-x>(<C-s>)で、無名レジスタ " にその履歴をセットします。
   - <C-t>で、その履歴を履歴から削除します。
+
+
+* コマンドライン内での利用 ~
+  以下のようにマッピングを定義すると、コマンドライン内で<C-r>を使って挿入した
+  文字列を<C-y>で1つ前のレジスタの内容に置き換えることができます。 >
+	cmap <C-r> <Plug>(yankround-insert-register)
+	cmap <C-y> <Plug>(yankround-pop)
+
+< 以下のようにするとEmacsライクに<C-y>で無名レジスタ挿入、<M-y>で置き換えとい
+  う挙動になります。 >
+	cmap <C-y> <Plug>(yankround-insert-register)"
+	cmap <M-y> <Plug>(yankround-pop)
 
 
 ==============================================================================
@@ -121,16 +133,16 @@ g:yankround_region_hl_groupname		*g:yankround_region_hl_groupname*
 	  autocmd ColorScheme * highlight YankRoundRegion guibg=Orange
 
 
-g:yankround_use_ctrlp			*g:yankround_use_ctrlp*
-	既定値: 0
-	非0 だと|:CtrlPYankRound|コマンドがVim起動時に定義される。
+g:ctrlp_available				*g:ctrlp_available*
+	既定値: 未定義
+	非0 に定義されていると ctrlp インターフェイスが利用可能になる。
 
 
 ------------------------------------------------------------------------------
 コマンド					*yankround-commands*
 
 :CtrlPYankRound					*:CtrlPYankRound*
-	|g:yankround_use_ctrlp|が 非0 でないと定義されない。
+	|g:ctrlp_available|が 非0 でないと定義されない。
 	|ctrlp.vim|のyankround拡張を呼ぶ。|yankround-usage|参照。
 
 
@@ -187,6 +199,26 @@ g:yankround_use_ctrlp			*g:yankround_use_ctrlp*
 	カーソルを動かすまで有効である。
 
 
+<Plug>(yankround-insert-register)	*<Plug>(yankround-insert-register)*
+	有効モード: コマンドライン
+	|c_<C-r>|とほぼ同じ挙動をする。|c_<C-r>|をタイプしたときと同じように
+	Vimはあなたがレジスタ名を入力するのを待つ。
+	これの直後は|<Plug>(yankround-pop)| |<Plug>(yankround-backpop)|による
+	挿入文字列の置き換えが有効になる。
+
+
+<Plug>(yankround-pop)				*<Plug>(yankround-pop)*
+	有効モード: コマンドライン
+	|<Plug>(yankround-insert-register)|で挿入した文字列を1つ前の無名レジス
+	タの内容に置き換える。
+
+
+<Plug>(yankround-backpop)			*<Plug>(yankround-backpop)*
+	有効モード: コマンドライン
+	|<Plug>(yankround-insert-register)|で挿入した文字列を1つ後の無名レジス
+	タの内容に置き換える。
+
+
 ------------------------------------------------------------------------------
 関数						*yankround-functions*
 
@@ -198,6 +230,11 @@ yankround#is_active()				*yankround#is_active*
 	例: yankroundが有効でないときには<C-p>で|ctrlp.vim|を呼ぶ。 >
  nnoremap <silent><SID>(ctrlp) :<C-u>CtrlP<CR>
  nmap <expr><C-p> yankround#is_active() ? "\<Plug>(yankround-prev)" : "<SID>(ctrlp)"
+
+
+yankround#is_cmdline_popable()		*yankround#is_cmdline_popable()*
+	|<Plug>(yankround-pop)| |<Plug>(yankround-backpop)|が有効なら 1 そうで
+	なければ 0 を返す。
 
 
 ==============================================================================

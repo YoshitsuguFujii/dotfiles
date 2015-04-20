@@ -4,10 +4,13 @@
 :OverCommandLine	over.jax	/*:OverCommandLine*
 :OverCommandLineNoremap	over.jax	/*:OverCommandLineNoremap*
 <Plug>(yankround-P)	yankround.jax	/*<Plug>(yankround-P)*
+<Plug>(yankround-backpop)	yankround.jax	/*<Plug>(yankround-backpop)*
 <Plug>(yankround-gP)	yankround.jax	/*<Plug>(yankround-gP)*
 <Plug>(yankround-gp)	yankround.jax	/*<Plug>(yankround-gp)*
+<Plug>(yankround-insert-register)	yankround.jax	/*<Plug>(yankround-insert-register)*
 <Plug>(yankround-next)	yankround.jax	/*<Plug>(yankround-next)*
 <Plug>(yankround-p)	yankround.jax	/*<Plug>(yankround-p)*
+<Plug>(yankround-pop)	yankround.jax	/*<Plug>(yankround-pop)*
 <Plug>(yankround-prev)	yankround.jax	/*<Plug>(yankround-prev)*
 OverCommandLineCursor	over.jax	/*OverCommandLineCursor*
 OverCommandLineCursorInsert	over.jax	/*OverCommandLineCursorInsert*
@@ -41,6 +44,7 @@ b:alignta_default_arguments	alignta.jax	/*b:alignta_default_arguments*
 b:alignta_default_options	alignta.jax	/*b:alignta_default_options*
 g:alignta_default_arguments	alignta.jax	/*g:alignta_default_arguments*
 g:alignta_default_options	alignta.jax	/*g:alignta_default_options*
+g:ctrlp_available	yankround.jax	/*g:ctrlp_available*
 g:over#command_line#paste_escape_chars	over.jax	/*g:over#command_line#paste_escape_chars*
 g:over#command_line#paste_filters	over.jax	/*g:over#command_line#paste_filters*
 g:over#command_line#search#enable_incsearch	over.jax	/*g:over#command_line#search#enable_incsearch*
@@ -55,7 +59,6 @@ g:yankround_dir	yankround.jax	/*g:yankround_dir*
 g:yankround_max_element_length	yankround.jax	/*g:yankround_max_element_length*
 g:yankround_max_history	yankround.jax	/*g:yankround_max_history*
 g:yankround_region_hl_groupname	yankround.jax	/*g:yankround_region_hl_groupname*
-g:yankround_use_ctrlp	yankround.jax	/*g:yankround_use_ctrlp*
 g:yankround_use_region_hl	yankround.jax	/*g:yankround_use_region_hl*
 over-changelog	over.jax	/*over-changelog*
 over-command_line-autocmd	over.jax	/*over-command_line-autocmd*
@@ -75,6 +78,7 @@ unite-alignta-usage	alignta.jax	/*unite-alignta-usage*
 unite-alignta-variables	alignta.jax	/*unite-alignta-variables*
 yankround	yankround.jax	/*yankround*
 yankround#is_active	yankround.jax	/*yankround#is_active*
+yankround#is_cmdline_popable()	yankround.jax	/*yankround#is_cmdline_popable()*
 yankround-commands	yankround.jax	/*yankround-commands*
 yankround-contents	yankround.jax	/*yankround-contents*
 yankround-functions	yankround.jax	/*yankround-functions*

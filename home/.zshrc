@@ -80,6 +80,11 @@ hash -d classi-setting=~/Dropbox/source/classi/classi_setting
 hash -d classi-core=~/Dropbox/source/classi/classi_core
 hash -d takuhai=~/Dropbox/source/takuhai
 hash -d real_af=~/Dropbox/source/real_af
+hash -d blog=~/Dropbox/source/blog/YoshitsuguFujii.github.io
+hash -d godir=~/Dropbox/source/go/my-project/src
+hash -d gem-standard=~/Dropbox/source/gem_standard
+hash -d yf_admin_base=~/Dropbox/source/engine/yf_admin_base
+hash -d resapo=~/Dropbox/source/Resapo
 
 # direnv設定
 # some more ls aliases
@@ -99,9 +104,9 @@ alias gc='git checkout'
 alias gb='git branch'
 alias rm="trash"
 alias zsh_reload="exec $SHELL -l"
-alias s='ssh $(grep -iE "^host[[:space:]]+[^*]" ~/.ssh/config|peco|awk "{print \$2}")'
+alias s='ssh $(grep -iE "host[[:space:]]+[^*]" ~/.ssh/config|peco|awk "{print \$2}")'
 alias be="bundle exec"
-alias hatebu="vim ~/hatebu.rb"
+alias gem-std="vim ~/Desktop/\[20150209\]GEM\ Standard/gem_standard.rb"
 
 alias netlisteners='lsof -i -P | grep LISTEN'
 case ${OSTYPE} in
@@ -122,6 +127,9 @@ alias memojg="vim ~/Dropbox/commonSettings/memo_jg.rb"
 alias classi='vim ~/Dropbox/commonSettings/classi.rb'
 alias logica='vim ~/Dropbox/commonSettings/logica.rb'
 alias redis_server="redis-server /usr/local/etc/redis.conf&G"
+alias gc4="git checkout 0401_release"
+alias gf4="git fetch mainline 0401_release:0401_release"
+alias gp4="git pull mainline 0401_release"
 
 # cdコマンドで自動実行
 function chpwd() {

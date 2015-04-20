@@ -93,11 +93,21 @@
     autocmd BufReadPre ~/* setlocal undofile
     augroup END
   endif
+
+  " 検索結果をQuickFixで開く
+  " http://qiita.com/shingargle/items/2240198928a52858c19e
+  autocmd QuickfixCmdPost * copen
 "}}}
 
 " util {{{
   " 保存時に行末の空白を除去する
   function! s:remove_dust()
+      " Don't strip on these filetypes
+      "if &ft =~ 'ruby\|javascript\|perl'
+      if &ft =~ 'markdown'
+          return
+      endif
+
       let cursor = getpos(".")
       %s/\s\+$//ge
       %s/\t/  /ge
@@ -105,8 +115,6 @@
       unlet cursor
   endfunction
   autocmd BufWritePre * call <SID>remove_dust()
-
-
 
   "ファイルの前回閉じた時の場所を覚えていてくれる
   if has("autocmd")
@@ -417,6 +425,7 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
   NeoBundle 'scrooloose/syntastic'
     let g:syntastic_mode_map = { 'mode': 'passive',
                 \ 'active_filetypes': ['ruby'] }
+    let g:syntastic_check_on_wq = 0
   " }}}
 
   NeoBundle 'basyura/unite-rails' " {{{
@@ -590,6 +599,36 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
 
   NeoBundle 'Shougo/neomru.vim' " {{{
     nnoremap <silent> ;ur :Unite file_mru<cr>
+  " }}}
+
+  " NeoBundle 'lambdalisue/vim-gista', {{{
+    NeoBundle 'lambdalisue/vim-gista', {
+        \ 'depends': [
+        \    'Shougo/unite.vim',
+        \    'tyru/open-browser.vim',
+        \]}
+    let g:gista#github_user = 'YoshitsuguFujii'
+
+    " 初期設定
+    " :Gista --login
+
+    " 現在開いているファイルをポスト
+    " :Gista
+
+    " 今までポストしたファイルを閲覧、編集
+    " :Gista -l
+  " }}}
+
+  NeoBundle 'rking/ag.vim' " {{{
+    " カーソル位置の単語をgrep検索
+    nnoremap <silent> ,cg :<C-u>Unite grep:. -buffer-name=search-buffer<CR><C-R><C-W>
+
+    " unite grep に ag(The Silver Searcher) を使う
+    if executable('ag')
+      let g:unite_source_grep_command = 'ag'
+      let g:unite_source_grep_default_opts = '--nogroup --nocolor --column'
+      let g:unite_source_grep_recursive_opt = ''
+    endif
   " }}}
 
   filetype plugin indent on

@@ -27,3 +27,16 @@ fi
 PATH=~/bin:$PATH
 PATH=~/bin/git-info:$PATH
 PATH=~/bin/git-ls-branches:$PATH
+PATH="/usr/local/sbin:$PATH"
+
+# goenv用
+export GOENVGOROOT=$HOME/.goenvs
+export GOENVTARGET=$HOME/bin
+export GOENVHOME=$HOME/workspace
+export GOPATH=$HOME/go/third-party:$HOME/go/my-project
+export PATH=$HOME/go/third-party/bin:$HOME/go/my-project/bin:$PATH # binをPATHに追加するのも忘れずに
+
+# docker用
+export DOCKER_HOST=tcp://$(boot2docker ip 2>/dev/null):2376
+export DOCKER_CERT_PATH=/Users/yoshitsugu/.boot2docker/certs/boot2docker-vm
+export DOCKER_TLS_VERIFY=1
