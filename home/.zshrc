@@ -74,17 +74,18 @@ if [ -n "$LS_COLORS" ]; then
 fi
 
 # hash
-hash -d classi=~/Dropbox/source/classi
-hash -d classi-mock=~/Dropbox/source/classi/classi-fl15-mock
-hash -d classi-setting=~/Dropbox/source/classi/classi_setting
-hash -d classi-core=~/Dropbox/source/classi/classi_core
-hash -d takuhai=~/Dropbox/source/takuhai
-hash -d real_af=~/Dropbox/source/real_af
-hash -d blog=~/Dropbox/source/blog/YoshitsuguFujii.github.io
-hash -d godir=~/Dropbox/source/go/my-project/src
-hash -d gem-standard=~/Dropbox/source/gem_standard
-hash -d yf_admin_base=~/Dropbox/source/engine/yf_admin_base
-hash -d resapo=~/Dropbox/source/Resapo
+hash -d classi=~/source/classi
+hash -d classi-mock=~/source/classi/classi-fl15-mock
+hash -d classi-setting=~/source/classi/classi_setting
+hash -d classi-core=~/source/classi/classi_core
+hash -d real_af=~/source/real_af
+hash -d blog=~/source/blog/YoshitsuguFujii.github.io
+hash -d godir=~/source/go/my-project/src
+hash -d gem-standard=~/source/gem_standard
+hash -d rails_admin_base=~/source/engine/rails_admin_base
+hash -d resapo=~/source/Resapo
+hash -d takuhai=~/source/takuhai
+hash -d osampo=~/source/osampo
 
 # direnv設定
 # some more ls aliases
@@ -356,7 +357,6 @@ EOF
 }
 # }}}
 
-
 # プロンプト設定 #################################################### {{{
 ## PROMPT内で変数展開・コマンド置換・算術演算を実行する。
 setopt prompt_subst
@@ -424,4 +424,53 @@ update_prompt()
 precmd_functions=($precmd_functions update_prompt)
 ################################################################################################### }}}
 
+# zsh で特定の文字列を入力すると自動で return を押したことにさせる -> http://qiita.com/lpm11/items/fb180f510b3852d1ab77 {{{
+typeset -A aaaliases
+aaaliases=(
+  "ll"    "ll"
+  "gb"    "gb"
+)
 
+self-insert-aa() {
+  local self_insert_next
+  zstyle -s ":self-insert-aa" self-insert-next self_insert_next
+
+  local aamatch
+  local aastroke
+  local aacommand
+  local aacontext
+  local aakey
+
+  aamatch=0
+  for aastroke in "${(@k)aaaliases}"; do
+    aacommand=$aaaliases[$aastroke]
+    aacontext=$aastroke[0,-2]
+    aakey=$aastroke[-1]
+
+    if [[ $LBUFFER == $aacontext && $KEYS == $aakey ]]; then
+      LBUFFER=$aacommand
+      zle .accept-line
+
+      aamatch=1
+      break
+    fi
+  done
+
+  if [[ $aamatch == 0 ]]; then
+    zle "$self_insert_next"
+  fi
+}
+
+self-insert-aa.on() {
+  # Find self-insert wrapper
+  # reference: knu/zsh-git-escape-magic (https://github.com/knu/zsh-git-escape-magic)
+  emulate -L zsh
+  local self_insert_next="${$(zle -lL | awk '$1=="zle"&&$2=="-N"&&$3=="self-insert"{print $4;exit}'):-.self-insert}"
+
+  zle -la "$self_insert_next" || zle -N "$self_insert_next"
+  zstyle ":self-insert-aa" self-insert-next "$self_insert_next"
+  zle -A self-insert-aa self-insert
+}
+zle -N self-insert-aa
+self-insert-aa.on
+# }}}}
